@@ -57,7 +57,7 @@ const AnimatedText = ({ text, el: Wrapper = 'p', className, stagger = 0.02, dela
       <motion.span variants={container} initial="hidden" animate="visible" className="flex">
         {letters.map((letter, index) => (
           <motion.span variants={child} key={index}>
-            {letter === ' ' ? ' ' : letter}
+            {letter === ' ' ? '\u00A0' : letter}
           </motion.span>
         ))}
       </motion.span>
