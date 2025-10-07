@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "artwork-target",
+      "description": "A simple line drawing of a house.",
+      "imageUrl": "https://picsum.photos/seed/house/600/400",
+      "imageHint": "house drawing"
+    },
+    {
+      "id": "artwork-user",
+      "description": "A simple line drawing of a car.",
+      "imageUrl": "https://picsum.photos/seed/car/600/400",
+      "imageHint": "car drawing"
+    }
+  ]
 }
