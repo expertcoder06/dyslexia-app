@@ -321,7 +321,7 @@ const FinalCTASection = () => {
             <motion.div
                 initial="offscreen"
                 whileInView="onscreen"
-                viewport={{ once: false, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.5 }}
                 variants={sectionVariants}
                 className="container mx-auto px-4 sm:px-6 lg:px-8 text-center"
             >
