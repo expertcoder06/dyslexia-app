@@ -6,17 +6,12 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Bot, Sparkles, MessageSquareHeart, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const GemIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8.53554 2.53553L11.364 0.63604C11.7259 0.391836 12.2741 0.391836 12.636 0.63604L15.4645 2.53553C15.8264 2.77974 16.0391 3.20817 16.0391 3.6721V7.5H7.96092V3.6721C7.96092 3.20817 8.17364 2.77974 8.53554 2.53553Z" fill="hsl(var(--primary))"/>
-    <path d="M7.96091 7.5H16.0391L18.5 9.5H5.5L7.96091 7.5Z" fill="hsl(var(--primary))" fillOpacity="0.7"/>
-    <path d="M18.5 9.5L16.0391 16.5L12 23L7.96091 16.5L5.5 9.5" fill="hsl(var(--accent))"/>
-    <path d="M18.5 9.5L12 11.5L5.5 9.5" fill="hsl(var(--accent))" fillOpacity="0.5"/>
-    <path d="M12 23V11.5" stroke="white" strokeOpacity="0.2" strokeWidth="1"/>
-    <path d="M16.0391 16.5L12 11.5L7.96091 16.5" stroke="white" strokeOpacity="0.2" strokeWidth="1"/>
-  </svg>
-);
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function FloatingAIBuddy() {
   const [isOpen, setIsOpen] = useState(false);
@@ -88,30 +83,38 @@ export default function FloatingAIBuddy() {
           </motion.div>
         )}
       </AnimatePresence>
-      <motion.button
-        onClick={handleToggle}
-        className={cn(
-            "w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg",
-            "bg-gradient-to-br from-purple-500 to-blue-500"
-        )}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      >
-        <AnimatePresence mode="wait">
-            {isOpen ? (
-                 <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-                    <X size={32} />
-                 </motion.div>
-            ) : (
-                <motion.div key="icon" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} >
-                    <GemIcon />
-                </motion.div>
-            )}
-        </AnimatePresence>
-      </motion.button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.button
+              onClick={handleToggle}
+              className={cn(
+                  "w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg",
+                  "bg-gradient-to-br from-purple-500 to-blue-500"
+              )}
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              whileHover={{ scale: 1.1, y: 0 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <AnimatePresence mode="wait">
+                  {isOpen ? (
+                       <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+                          <X size={32} />
+                       </motion.div>
+                  ) : (
+                      <motion.div key="icon" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} >
+                          <Bot size={32} />
+                      </motion.div>
+                  )}
+              </AnimatePresence>
+            </motion.button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Your AI Buddy</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 }
-
-    
