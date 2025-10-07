@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, Bot, Brush, Gamepad2, Puzzle, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import FloatingAIBuddy from '@/components/features/FloatingAIBuddy';
 
 // Dyslexia-friendly font is already in tailwind.config.ts as 'font-dyslexic' (Lexend)
 // We will use PT Sans for headings as requested.
@@ -346,6 +347,7 @@ export default function Home() {
       <FeaturesSection />
       <HowItWorksSection />
       <FinalCTASection />
+      <FloatingAIBuddy />
       <footer className="bg-muted/40">
         <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} LexiLearn. All rights reserved.</p>
