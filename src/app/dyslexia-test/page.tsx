@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { BookOpen, AlertTriangle, CheckCircle, BarChart } from 'lucide-react';
+import { BookOpen, AlertTriangle, CheckCircle, BarChart, ArrowRight, ArrowLeft, RotateCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Progress } from '@/components/ui/progress';
 
 const questions = [
   {
@@ -120,20 +121,23 @@ const questions = [
 ];
 
 const Results = ({ score, total, onRetake }: { score: number, total: number, onRetake: () => void }) => {
+    const scorePercentage = (score / total) * 100;
+    
     const getResult = () => {
-        const percentage = (score / total) * 100;
-        if (percentage < 30) {
+        if (scorePercentage < 30) {
             return {
                 level: "Low Likelihood",
-                color: "text-green-500",
+                colorClass: "text-green-500",
+                progressColor: "bg-green-500",
                 icon: <CheckCircle className="w-16 h-16" />,
                 description: "Based on your answers, the observed behaviors show a low correlation with common signs of dyslexia.",
                 advice: "While the signs are not strong, continue to monitor your child's progress and encourage a love for reading. If you have any concerns, it's always best to speak with a teacher or pediatrician."
             };
-        } else if (percentage < 60) {
+        } else if (scorePercentage < 60) {
             return {
                 level: "Moderate Likelihood",
-                color: "text-yellow-500",
+                colorClass: "text-yellow-500",
+                progressColor: "bg-yellow-500",
                 icon: <BarChart className="w-16 h-16" />,
                 description: "Your answers indicate some signs that are consistent with dyslexia.",
                 advice: "It may be beneficial to discuss these observations with your child's teacher and consider a professional evaluation. Early support can make a significant difference."
@@ -141,7 +145,8 @@ const Results = ({ score, total, onRetake }: { score: number, total: number, onR
         } else {
             return {
                 level: "High Likelihood",
-                color: "text-red-500",
+                colorClass: "text-red-500",
+                progressColor: "bg-red-500",
                 icon: <AlertTriangle className="w-16 h-16" />,
                 description: "The behaviors you've reported show a strong correlation with the common signs of dyslexia.",
                 advice: "We strongly recommend that you consult with a specialist, such as an educational psychologist or a pediatrician, for a formal diagnostic assessment. Early and targeted intervention is key to helping children with dyslexia thrive."
@@ -152,24 +157,24 @@ const Results = ({ score, total, onRetake }: { score: number, total: number, onR
     const result = getResult();
 
     return (
-        <Card className="w-full max-w-2xl">
-            <CardHeader className="text-center">
-                <CardTitle className="text-3xl">Test Results</CardTitle>
+        <Card className="w-full max-w-2xl shadow-2xl">
+            <CardHeader className="text-center bg-muted/30 rounded-t-lg">
+                <CardTitle className="text-3xl font-bold">Screening Results</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center gap-4 text-center">
-                <div className={result.color}>{result.icon}</div>
-                <h3 className={`text-2xl font-bold ${result.color}`}>{result.level}</h3>
+            <CardContent className="flex flex-col items-center gap-6 p-8 text-center">
+                <div className={result.colorClass}>{result.icon}</div>
+                <h3 className={`text-2xl font-bold ${result.colorClass}`}>{result.level}</h3>
+                <div className="w-full text-center">
+                    <p className="text-lg font-medium">Your Score: {score} / {total}</p>
+                    <Progress value={scorePercentage} className={`mt-2 h-3 [&>div]:${result.progressColor}`} />
+                </div>
                 <p className="text-lg">{result.description}</p>
                 <p className="text-muted-foreground">{result.advice}</p>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 my-4">
-                    <div className={`h-4 rounded-full ${result.color.replace('text', 'bg')}`} style={{ width: `${(score / total) * 100}%` }}></div>
-                </div>
-                <p className="text-sm text-muted-foreground">Your Score: {score} out of {total}</p>
 
                 <Card className="w-full mt-4 bg-amber-50 border-amber-200 dark:bg-amber-950 dark:border-amber-800">
                     <CardContent className="p-4">
                         <div className="flex items-start gap-4">
-                            <AlertTriangle className="w-5 h-5 mt-1 text-amber-600" />
+                            <AlertTriangle className="w-6 h-6 mt-1 text-amber-600" />
                             <div>
                                 <h4 className="font-semibold text-amber-800 dark:text-amber-300">Important Disclaimer</h4>
                                 <p className="text-sm text-amber-700 dark:text-amber-400">
@@ -180,8 +185,11 @@ const Results = ({ score, total, onRetake }: { score: number, total: number, onR
                     </CardContent>
                 </Card>
             </CardContent>
-            <CardFooter className="justify-center">
-                <Button onClick={onRetake}>Retake The Test</Button>
+            <CardFooter className="justify-center bg-muted/30 py-4 rounded-b-lg">
+                <Button onClick={onRetake} size="lg">
+                    <RotateCw className="mr-2 h-4 w-4" />
+                    Retake The Test
+                </Button>
             </CardFooter>
         </Card>
     )
@@ -226,56 +234,68 @@ export default function DyslexiaTestPage() {
   const currentQuestion = questions[currentQuestionIndex];
   const isCurrentQuestionAnswered = !!answers[currentQuestion.id];
   const totalPossibleScore = questions.length * 2;
+  const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   if (isFinished) {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8">
+        <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-blue-50 dark:from-background dark:to-slate-900 p-4 md:p-8">
             <Results score={calculateScore()} total={totalPossibleScore} onRetake={handleRetake} />
         </main>
     )
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-center text-3xl flex items-center justify-center gap-2">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-blue-50 dark:from-background dark:to-slate-900 p-4">
+      <Card className="w-full max-w-2xl shadow-2xl">
+        <CardHeader className="text-center">
+          <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit">
             <BookOpen className="w-8 h-8 text-primary" />
-            Dyslexia Screening Test
+          </div>
+          <CardTitle className="text-center text-3xl font-bold mt-4">
+            Dyslexia Screening
           </CardTitle>
-          <CardDescription className="text-center pt-2">
-            This is a quick screening tool for parents. Answer the questions based on your child's behavior.
+          <CardDescription className="text-center pt-2 text-base">
+            Answer these questions based on your child's behavior. This is a quick screening, not a diagnosis.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-            <div className="my-4">
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                    <div className="bg-primary h-2.5 rounded-full" style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}></div>
-                </div>
+        <CardContent className="px-6 md:px-8">
+            <div className="my-6">
+                <Progress value={progressPercentage} className="h-3" />
                 <p className="text-center text-sm text-muted-foreground mt-2">Question {currentQuestionIndex + 1} of {questions.length}</p>
             </div>
-          <div className="p-4 border rounded-lg bg-muted/20">
-            <h3 className="text-lg font-semibold mb-4 text-center">{currentQuestion.text}</h3>
+          <div className="p-6 border rounded-lg bg-muted/30 min-h-[200px] flex flex-col justify-center">
+            <h3 className="text-xl font-semibold mb-6 text-center">{currentQuestion.text}</h3>
             <RadioGroup
               value={answers[currentQuestion.id]}
               onValueChange={(value) => handleValueChange(currentQuestion.id, value)}
-              className="flex flex-col gap-4 items-center"
+              className="flex flex-col sm:flex-row justify-center gap-4"
             >
               {currentQuestion.options.map(option => (
-                <div key={option.value} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.value} id={`${currentQuestion.id}-${option.value}`} />
-                  <Label htmlFor={`${currentQuestion.id}-${option.value}`} className="text-base cursor-pointer">{option.label}</Label>
+                <div key={option.value}>
+                  <RadioGroupItem value={option.value} id={`${currentQuestion.id}-${option.value}`} className="sr-only" />
+                  <Label 
+                    htmlFor={`${currentQuestion.id}-${option.value}`} 
+                    className={`text-base cursor-pointer border-2 rounded-lg px-6 py-3 transition-all duration-200 block text-center
+                        ${answers[currentQuestion.id] === option.value 
+                            ? 'bg-primary text-primary-foreground border-primary' 
+                            : 'bg-background hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                  >
+                    {option.label}
+                  </Label>
                 </div>
               ))}
             </RadioGroup>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={handleBack}>
-            {currentQuestionIndex === 0 ? 'Back to Home' : 'Back'}
+        <CardFooter className="flex justify-between px-6 md:px-8 py-6 bg-muted/30 rounded-b-lg">
+          <Button variant="outline" size="lg" onClick={handleBack}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {currentQuestionIndex === 0 ? 'Home' : 'Back'}
           </Button>
-          <Button onClick={handleNext} disabled={!isCurrentQuestionAnswered}>
+          <Button size="lg" onClick={handleNext} disabled={!isCurrentQuestionAnswered}>
             {currentQuestionIndex === questions.length - 1 ? 'Finish & See Results' : 'Next'}
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </CardFooter>
       </Card>
