@@ -34,8 +34,12 @@ const Header = () => (
           <Button variant="ghost" size="icon">
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white">Sign in</Button>
-          <Button className="bg-green-500 hover:bg-green-600 text-white">Get started</Button>
+          <Link href="/signin">
+            <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white">Sign in</Button>
+          </Link>
+          <Link href="/signup">
+            <Button className="bg-green-500 hover:bg-green-600 text-white">Get started</Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -63,7 +67,9 @@ export default function Home() {
                 Empowering millions of K-12 students
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-                <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
+                <Link href="/signup">
+                  <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
+                </Link>
                 <Link href="/dyslexia-test">
                   <Button size="lg" variant="outline" className="bg-green-500 hover:bg-green-600 text-white font-bold border-green-500 w-full">DYSLEXIA TEST FOR KIDS</Button>
                 </Link>
