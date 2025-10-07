@@ -8,9 +8,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: ["framer-motion"],
-  },
+  serverExternalPackages: ["framer-motion"],
   images: {
     remotePatterns: [
       {
