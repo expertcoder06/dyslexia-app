@@ -215,7 +215,7 @@ const FeaturesSection = () => {
         <motion.div
           initial="offscreen"
           whileInView="onscreen"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ amount: 0.3 }}
           transition={{ staggerChildren: 0.2 }}
         >
           <motion.h2 variants={cardVariants} className="text-4xl font-bold text-center mb-4">A World of Playful Learning</motion.h2>
@@ -265,7 +265,7 @@ const HowItWorksSection = () => {
         <motion.div
           initial="offscreen"
           whileInView="onscreen"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ amount: 0.3 }}
           transition={{ staggerChildren: 0.3 }}
           className="text-center"
         >
@@ -320,7 +320,7 @@ const FinalCTASection = () => {
             <motion.div
                 initial="offscreen"
                 whileInView="onscreen"
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ amount: 0.5 }}
                 variants={sectionVariants}
                 className="container mx-auto px-4 sm:px-6 lg:px-8 text-center"
             >
@@ -356,3 +356,5 @@ export default function Home() {
     </main>
   );
 }
+
+    
