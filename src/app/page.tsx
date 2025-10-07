@@ -16,7 +16,7 @@ const Header = () => (
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center space-x-2">
               <BookOpen className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">LexBox</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">LexiLearn</span>
             </a>
           </div>
           <div className="hidden md:block">
@@ -37,7 +37,7 @@ const Header = () => (
           <Link href="/signin">
             <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white">Sign in</Button>
           </Link>
-          <Link href="/dashboard">
+          <Link href="/signup">
             <Button className="bg-green-500 hover:bg-green-600 text-white">Get started</Button>
           </Link>
         </div>
@@ -67,7 +67,7 @@ export default function Home() {
                 Empowering millions of K-12 students
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-                <Link href="/dashboard">
+                <Link href="/signup">
                   <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
                 </Link>
                 <Link href="/dyslexia-test">
