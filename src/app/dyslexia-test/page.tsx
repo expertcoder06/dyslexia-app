@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -9,116 +9,143 @@ import { BookOpen, AlertTriangle, CheckCircle, BarChart, ArrowRight, ArrowLeft, 
 import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 
-const questions = [
+const allQuestions = [
   {
     id: 'q1',
     text: "Does your child have trouble recognizing the letters of the alphabet?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q2',
     text: "Does your child misread or omit common short words like 'a', 'the', 'is'?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q3',
     text: "Does your child confuse letters that look similar, like 'b' and 'd', or 'p' and 'q'?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q4',
     text: "Does your child have difficulty sounding out new words?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q5',
     text: "Does your child complain about words or letters 'moving around' on the page while reading?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q6',
     text: "Does your child struggle with rhyming words (e.g., cat, hat, bat)?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q7',
     text: "Does your child have difficulty remembering sequences, like days of the week, months, or the alphabet?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q8',
     text: "Is your child's spelling unpredictable and inconsistent (e.g., spelling the same word differently in the same document)?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q9',
     text: "Does your child avoid reading aloud or seem unusually stressed or tired when asked to do so?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q10',
     text: "Does your child have trouble telling left from right?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q11',
     text: "When writing, does your child reverse letters or numbers past the first grade (e.g., writing 'saw' as 'was', or '3' as 'E')?",
     options: [
-      { value: '0', label: 'Rarely or Never' },
+      { value: '0', label: 'Never' },
       { value: '1', label: 'Sometimes' },
       { value: '2', label: 'Often' },
+      { value: '3', label: 'Very Often' },
     ],
   },
   {
     id: 'q12',
     text: "Is there a family history of dyslexia or reading difficulties?",
-    options: [
+     options: [
       { value: '0', label: 'No' },
       { value: '1', label: 'Unsure' },
-      { value: '2', label: 'Yes' },
+      { value: '2', label: 'Yes (Immediate Family)' },
+      { value: '3', label: 'Yes (Extended Family)' },
     ],
   },
 ];
+
+// Function to shuffle an array
+const shuffleArray = <T,>(array: T[]): T[] => {
+  let currentIndex = array.length, randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+};
 
 const Results = ({ score, total, onRetake }: { score: number, total: number, onRetake: () => void }) => {
     const scorePercentage = (score / total) * 100;
@@ -201,6 +228,17 @@ export default function DyslexiaTestPage() {
   const [isFinished, setIsFinished] = useState(false);
   const router = useRouter();
 
+  const [questions, setQuestions] = useState<typeof allQuestions>([]);
+
+  useEffect(() => {
+    // Shuffle questions and their options on component mount
+    const shuffledQuestions = shuffleArray([...allQuestions]).map(q => ({
+      ...q,
+      options: shuffleArray([...q.options])
+    }));
+    setQuestions(shuffledQuestions);
+  }, []);
+
   const handleValueChange = (questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
@@ -229,11 +267,26 @@ export default function DyslexiaTestPage() {
     setAnswers({});
     setCurrentQuestionIndex(0);
     setIsFinished(false);
+    // Re-shuffle questions for the new test
+    const shuffledQuestions = shuffleArray([...allQuestions]).map(q => ({
+      ...q,
+      options: shuffleArray([...q.options])
+    }));
+    setQuestions(shuffledQuestions);
+  }
+
+  if (questions.length === 0) {
+    // Loading state while questions are being shuffled
+    return (
+        <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-blue-50 dark:from-background dark:to-slate-900 p-4">
+            <p>Loading test...</p>
+        </main>
+    );
   }
 
   const currentQuestion = questions[currentQuestionIndex];
   const isCurrentQuestionAnswered = !!answers[currentQuestion.id];
-  const totalPossibleScore = questions.length * 2;
+  const totalPossibleScore = questions.length * 3; // Max score per question is 3
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   if (isFinished) {
@@ -268,7 +321,7 @@ export default function DyslexiaTestPage() {
             <RadioGroup
               value={answers[currentQuestion.id]}
               onValueChange={(value) => handleValueChange(currentQuestion.id, value)}
-              className="flex flex-col sm:flex-row justify-center gap-4"
+              className="grid grid-cols-2 justify-center gap-4"
             >
               {currentQuestion.options.map(option => (
                 <div key={option.value}>
