@@ -1,115 +1,134 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import type { User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { signInAnonymously } from 'firebase/auth';
-
-import SpellbeeGame from '@/components/features/SpellbeeGame';
-import LetterTracingGame from '@/components/features/LetterTracingGame';
-import ArtworkMatching from '@/components/features/ArtworkMatching';
-import AIStorytelling from '@/components/features/AIStorytelling';
-import AIBuddy from '@/components/features/AIBuddy';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookOpen, BrainCircuit, Mic, Palette, SpellCheck, Star } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { BookOpen, Rocket, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
-type View = 'home' | 'spellbee' | 'letter-tracing' | 'artwork' | 'storytelling' | 'ai-buddy';
-
-const gameComponents: Record<View, React.ComponentType<any> | null> = {
-  home: null,
-  spellbee: SpellbeeGame,
-  'letter-tracing': LetterTracingGame,
-  artwork: ArtworkMatching,
-  storytelling: AIStorytelling,
-  'ai-buddy': AIBuddy,
-};
-
-const gameInfo = [
-  { id: 'spellbee', title: 'Spellbee', description: 'Arrange letters to spell words correctly.', icon: SpellCheck },
-  { id: 'letter-tracing', title: 'Letter Sounds', description: 'Match spoken sounds to the right letters.', icon: Mic },
-  { id: 'artwork', title: 'Artwork Match', description: 'Draw an object and see how well the AI understands it.', icon: Palette },
-  { id: 'storytelling', title: 'Story Scramble', description: 'Read a story and put the key events in order.', icon: BookOpen },
-  { id: 'ai-buddy', title: 'AI Buddy', description: 'Your personal buddy to track emotions and give rewards.', icon: Star },
-];
-
-function HomePage({ onNavigate }: { onNavigate: (view: View) => void }) {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold font-headline text-primary mb-2">Welcome to LexiLearn</h1>
-        <p className="text-lg text-muted-foreground">Your fun and friendly space to learn and grow.</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {gameInfo.map((game) => (
-          <Card key={game.id} className="flex flex-col hover:shadow-lg transition-shadow duration-300 bg-card">
-            <CardHeader className="flex-row items-center gap-4 space-y-0 pb-4">
-              <game.icon className="w-10 h-10 text-primary" />
-              <div className="flex-1">
-                <CardTitle className="font-headline">{game.title}</CardTitle>
-                <CardDescription>{game.description}</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow flex items-end">
-              <Button className="w-full" onClick={() => onNavigate(game.id as View)}>
-                Start Game
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+const Header = () => (
+  <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between h-16">
+        <div className="flex items-center">
+          <div className="flex-shrink-0">
+            <a href="#" className="flex items-center space-x-2">
+              <BookOpen className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">LexBox</span>
+            </a>
+          </div>
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              <a href="#" className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">
+                <Rocket className="h-4 w-4" />
+                <span>How it works</span>
+              </a>
+              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">About Dyslexia</a>
+              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Blog</a>
+            </div>
+          </div>
+        </div>
+        <div className="hidden md:flex items-center space-x-4">
+          <Button variant="ghost" size="icon">
+            <Search className="h-5 w-5" />
+          </Button>
+          <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white">Sign in</Button>
+          <Button className="bg-green-500 hover:bg-green-600 text-white">Get started</Button>
+        </div>
       </div>
     </div>
-  );
-}
+  </header>
+);
+
 
 export default function Home() {
-  const [view, setView] = useState<View>('home');
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        try {
-          const userCredential = await signInAnonymously(auth);
-          setUser(userCredential.user);
-        } catch (error) {
-          console.error("Anonymous sign-in failed:", error);
-        }
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const ActiveComponent = gameComponents[view];
-  const gameTitle = gameInfo.find(g => g.id === view)?.title;
-
-  if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
+  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-illustration');
+  const videoThumbnail = PlaceHolderImages.find(img => img.id === 'video-thumbnail');
+  
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {view === 'home' ? (
-        <HomePage onNavigate={setView} />
-      ) : (
-        <div className="container mx-auto px-4 py-8">
-          <header className="flex items-center justify-between mb-6">
-            <Button variant="ghost" onClick={() => setView('home')} className="flex items-center gap-2">
-              <ArrowLeft size={16} />
-              Back to Home
-            </Button>
-            <h1 className="text-3xl font-bold font-headline text-primary">{gameTitle}</h1>
-            <div className="w-36"></div>
-          </header>
-          <Separator className="mb-8" />
-          {ActiveComponent && <ActiveComponent user={user} />}
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="bg-primary/10 py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+                Transforming Dyslexia Education with AI & Gamification
+              </h1>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                Empowering millions of K-12 students
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+                <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
+                <Button size="lg" variant="outline" className="bg-green-500 hover:bg-green-600 text-white font-bold border-green-500">DYSLEXIA TEST FOR KIDS</Button>
+              </div>
+            </div>
+            <div>
+              {heroImage && (
+                <Image
+                  src={heroImage.imageUrl}
+                  alt={heroImage.description}
+                  width={600}
+                  height={400}
+                  data-ai-hint={heroImage.imageHint}
+                  className="rounded-lg"
+                />
+              )}
+            </div>
+          </div>
         </div>
-      )}
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-blue-500 text-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              {videoThumbnail && (
+                 <Card className="overflow-hidden">
+                    <CardContent className="p-0">
+                      <Image
+                        src={videoThumbnail.imageUrl}
+                        alt={videoThumbnail.description}
+                        width={600}
+                        height={400}
+                        data-ai-hint={videoThumbnail.imageHint}
+                        className="w-full"
+                      />
+                    </CardContent>
+                 </Card>
+              )}
+               <div className="absolute inset-0 flex items-center justify-center">
+                  <Button variant="ghost" size="icon" className="w-20 h-20 bg-white/30 hover:bg-white/50 rounded-full">
+                    <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm8.328 6.54l-4.89-3.26A.5.5 0 007 7.69v5.62a.5.5 0 00.438.49l.062.01.062-.01 4.89-3.26a.5.5 0 000-.88z"/>
+                    </svg>
+                  </Button>
+                </div>
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold mb-6">How It Works?</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold">For parents</h3>
+                  <p className="mt-2 text-blue-100">
+                    Play. Learn. Grow. We leverage artificial intelligence and machine learning to help K-12 students with dyslexia improve their reading skills and achieve their full potential.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold">For children</h3>
+                  <p className="mt-2 text-blue-100">
+                    Create a Profile. Sign up today, and create your student's custom profile to track progress, unlocked achievements, earn 3D rewards.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
