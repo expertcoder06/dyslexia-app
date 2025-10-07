@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { BookOpen, Rocket, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 const Header = () => (
   <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50">
@@ -63,7 +64,9 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
                 <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
-                <Button size="lg" variant="outline" className="bg-green-500 hover:bg-green-600 text-white font-bold border-green-500">DYSLEXIA TEST FOR KIDS</Button>
+                <Link href="/dyslexia-test">
+                  <Button size="lg" variant="outline" className="bg-green-500 hover:bg-green-600 text-white font-bold border-green-500 w-full">DYSLEXIA TEST FOR KIDS</Button>
+                </Link>
               </div>
             </div>
             <div>
