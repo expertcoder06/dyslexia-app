@@ -35,10 +35,10 @@ const Header = () => (
             <Search className="h-5 w-5" />
           </Button>
           <Link href="/signin">
-            <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white">Sign in</Button>
+            <Button variant="outline">Sign in</Button>
           </Link>
           <Link href="/signup">
-            <Button className="bg-green-500 hover:bg-green-600 text-white">Get started</Button>
+            <Button>Get started</Button>
           </Link>
         </div>
       </div>
@@ -68,10 +68,10 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
                 <Link href="/signup">
-                  <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold">SIGN UP FOR FREE</Button>
+                  <Button size="lg" className="font-bold">SIGN UP FOR FREE</Button>
                 </Link>
                 <Link href="/dyslexia-test">
-                  <Button size="lg" variant="outline" className="bg-green-500 hover:bg-green-600 text-white font-bold border-green-500 w-full">DYSLEXIA TEST FOR KIDS</Button>
+                  <Button size="lg" variant="secondary" className="font-bold w-full">DYSLEXIA TEST FOR KIDS</Button>
                 </Link>
               </div>
             </div>
