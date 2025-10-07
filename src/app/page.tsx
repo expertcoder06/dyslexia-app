@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, MotionValue } from 'framer-motion';
 import { ArrowRight, BookOpen, Bot, Brush, Gamepad2, Puzzle, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +22,15 @@ const GemIcon = () => (
   </svg>
 );
 
-const AnimatedText = ({ text, el: Wrapper = 'p', className, stagger = 0.02, delay = 0 }) => {
+type AnimatedTextProps = {
+  text: string;
+  el?: keyof JSX.IntrinsicElements;
+  className?: string;
+  stagger?: number;
+  delay?: number;
+};
+
+const AnimatedText = ({ text, el: Wrapper = 'p', className, stagger = 0.02, delay = 0 }: AnimatedTextProps) => {
   const letters = Array.from(text);
   const container = {
     hidden: { opacity: 0 },
@@ -54,13 +62,13 @@ const AnimatedText = ({ text, el: Wrapper = 'p', className, stagger = 0.02, dela
 
   return (
     <Wrapper className={className}>
-      <motion.span variants={container} initial="hidden" animate="visible" className="flex">
+      <motion.div variants={container} initial="hidden" animate="visible" className="flex">
         {letters.map((letter, index) => (
           <motion.span variants={child} key={index}>
             {letter === ' ' ? '\u00A0' : letter}
           </motion.span>
         ))}
-      </motion.span>
+      </motion.div>
     </Wrapper>
   );
 };
