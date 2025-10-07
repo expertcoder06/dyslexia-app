@@ -88,84 +88,85 @@ const Header = () => (
 );
 
 const HeroSection = () => (
-  <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5 }}
-      className="absolute inset-0 z-0"
+    <motion.section 
+        className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden"
+        initial="offscreen"
+        whileInView="onscreen"
+        viewport={{ amount: 0.3 }}
     >
-      <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 via-purple-900/20 to-background"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-    </motion.div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0 z-0"
+        >
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 via-purple-900/20 to-background"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+        </motion.div>
 
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 z-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div className="text-center md:text-left">
-          <AnimatedText el="h1" text="Unlock Your Potential." className="text-4xl md:text-6xl font-bold tracking-tighter" delay={0.2} />
-          <AnimatedText el="p" text="The Gamified Platform for Dyslexia." className="text-4xl md:text-6xl font-bold tracking-tighter text-primary" delay={0.4} />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="text-center md:text-left">
+                    <AnimatedText el="h1" text="Unlock Your Potential." className="text-4xl md:text-6xl font-bold tracking-tighter" delay={0.2} />
+                    <AnimatedText el="p" text="The Gamified Platform for Dyslexia." className="text-4xl md:text-6xl font-bold tracking-tighter text-primary" delay={0.4} />
 
-          <motion.p
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 1, duration: 0.8 }}
-            className="mt-4 text-lg text-muted-foreground font-dyslexic"
-          >
-            Transforming Learning with AI, Play, and Empathy.
-          </motion.p>
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 1.2, duration: 0.8 }}
-            className="mt-8"
-          >
-            <Link href="/signup">
-              <Button size="lg" className="font-bold group">
-                Start Your Journey <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-          </motion.div>
+                    <motion.p
+                        variants={{ offscreen: { opacity: 0, y: 20 }, onscreen: { opacity: 1, y: 0 } }}
+                        transition={{ delay: 1, duration: 0.8 }}
+                        className="mt-4 text-lg text-muted-foreground font-dyslexic"
+                    >
+                        Transforming Learning with AI, Play, and Empathy.
+                    </motion.p>
+                    <motion.div
+                        variants={{ offscreen: { opacity: 0, y: 20 }, onscreen: { opacity: 1, y: 0 } }}
+                        transition={{ delay: 1.2, duration: 0.8 }}
+                        className="mt-8"
+                    >
+                        <Link href="/signup">
+                            <Button size="lg" className="font-bold group">
+                                Start Your Journey <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                            </Button>
+                        </Link>
+                    </motion.div>
+                </div>
+                <div className="relative h-64 md:h-96 flex items-center justify-center">
+                    <motion.div
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.8, type: 'spring', stiffness: 100 }}
+                        className="absolute"
+                    >
+                        <Bot size={128} className="text-primary/30" />
+                    </motion.div>
+                    <motion.div
+                        animate={{ y: [-5, 5, -5], rotate: [-5, 5, -5] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute"
+                    >
+                        <GemIcon />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1, duration: 0.5 }}
+                        className="absolute text-6xl font-dyslexic text-muted-foreground/50"
+                        style={{ transform: 'translate(80px, -60px) rotate(15deg)' }}
+                    >
+                        bdp
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.1, duration: 0.5 }}
+                        className="absolute text-4xl font-dyslexic text-muted-foreground/50"
+                        style={{ transform: 'translate(-100px, 40px) rotate(-10deg)' }}
+                    >
+                        saw
+                    </motion.div>
+                </div>
+            </div>
         </div>
-        <div className="relative h-64 md:h-96 flex items-center justify-center">
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.8, type: 'spring', stiffness: 100 }}
-            className="absolute"
-          >
-            <Bot size={128} className="text-primary/30" />
-          </motion.div>
-          <motion.div
-            animate={{ y: [-5, 5, -5], rotate: [-5, 5, -5] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute"
-          >
-            <GemIcon />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1, duration: 0.5 }}
-            className="absolute text-6xl font-dyslexic text-muted-foreground/50"
-            style={{ transform: 'translate(80px, -60px) rotate(15deg)' }}
-          >
-            bdp
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.1, duration: 0.5 }}
-            className="absolute text-4xl font-dyslexic text-muted-foreground/50"
-            style={{ transform: 'translate(-100px, 40px) rotate(-10deg)' }}
-          >
-            saw
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </motion.section>
 );
 
 const features = [
